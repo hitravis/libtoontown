@@ -1125,7 +1125,7 @@ input_chars(char *buffer, int &result, int max_size) {
       // is because the \n.* rule below, which fills current_line
       // normally, doesn't catch the first line.
       int length = std::min(max_error_width, result);
-      strncpy(current_line, buffer, length);
+      strncpy_s(current_line, buffer, length);
       current_line[length] = '\0';
       line_number++;
       col_number = 0;
@@ -1524,7 +1524,7 @@ YY_RULE_SETUP
   // New line.  Save a copy of the line so we can print it out for the
   // benefit of the user in case we get an error.
 
-  strncpy(current_line, yytext+1, max_error_width);
+  strncpy_s(current_line, yytext+1, max_error_width);
   current_line[max_error_width] = '\0';
   line_number++;
   col_number=0;
@@ -2624,7 +2624,7 @@ static void yy_load_buffer_state  (void)
         b->yy_bs_column = 0;
     }
 
-        b->yy_is_interactive = file ? (isatty( fileno(file) ) > 0) : 0;
+        b->yy_is_interactive = file ? (_isatty( _fileno(file) ) > 0) : 0;
 
 	errno = oerrno;
 }

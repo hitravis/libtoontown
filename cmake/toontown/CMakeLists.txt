@@ -1,7 +1,17 @@
-cmake_minimum_required(VERSION 2.8.8 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.19.2 FATAL_ERROR)
 project(libtoontown)
 
 ### Define core components ###
+set(MOVEMENT_FILES
+    ${CMAKE_SOURCE_DIR}/src/toontown/movement/cImpulse.cxx
+    ${CMAKE_SOURCE_DIR}/src/toontown/movement/cImpulse.h
+    ${CMAKE_SOURCE_DIR}/src/toontown/movement/cMover.cxx
+    ${CMAKE_SOURCE_DIR}/src/toontown/movement/cMover.h
+    ${CMAKE_SOURCE_DIR}/src/toontown/movement/cMoverGroup.cxx
+    ${CMAKE_SOURCE_DIR}/src/toontown/movement/cMoverGroup.h
+    ${CMAKE_SOURCE_DIR}/src/toontown/movement/config_movement.cxx
+    ${CMAKE_SOURCE_DIR}/src/toontown/movement/config_movement.h
+)
 set(DNA_FILES
     ${CMAKE_SOURCE_DIR}/src/toontown/dna/config_dna.cxx
     ${CMAKE_SOURCE_DIR}/src/toontown/dna/config_dna.h
@@ -62,14 +72,14 @@ set(DNA_FILES
     ${CMAKE_SOURCE_DIR}/src/toontown/dna/parser.hxx
 )
 set(PET_FILES
-    ${CMAKE_SOURCE_DIR}/src/otp/movement/cImpulse.cxx
-    ${CMAKE_SOURCE_DIR}/src/otp/movement/cImpulse.h
-    ${CMAKE_SOURCE_DIR}/src/otp/movement/cMover.cxx
-    ${CMAKE_SOURCE_DIR}/src/otp/movement/cMover.h
-    ${CMAKE_SOURCE_DIR}/src/otp/movement/cMoverGroup.cxx
-    ${CMAKE_SOURCE_DIR}/src/otp/movement/cMoverGroup.h
-    ${CMAKE_SOURCE_DIR}/src/otp/movement/config_movement.cxx
-    ${CMAKE_SOURCE_DIR}/src/otp/movement/config_movement.h
+    ${CMAKE_SOURCE_DIR}/src/toontown/movement/cImpulse.cxx
+    ${CMAKE_SOURCE_DIR}/src/toontown/movement/cImpulse.h
+    ${CMAKE_SOURCE_DIR}/src/toontown/movement/cMover.cxx
+    ${CMAKE_SOURCE_DIR}/src/toontown/movement/cMover.h
+    ${CMAKE_SOURCE_DIR}/src/toontown/movement/cMoverGroup.cxx
+    ${CMAKE_SOURCE_DIR}/src/toontown/movement/cMoverGroup.h
+    ${CMAKE_SOURCE_DIR}/src/toontown/movement/config_movement.cxx
+    ${CMAKE_SOURCE_DIR}/src/toontown/movement/config_movement.h
     ${CMAKE_SOURCE_DIR}/src/toontown/pets/cPetBrain.cxx
     ${CMAKE_SOURCE_DIR}/src/toontown/pets/cPetBrain.h
     ${CMAKE_SOURCE_DIR}/src/toontown/pets/cPetChase.cxx
@@ -96,7 +106,7 @@ include_directories(${CMAKE_SOURCE_DIR}/src/toontown/dna)
 include_directories(${CMAKE_SOURCE_DIR}/src/toontown/pets)
 include_directories(${CMAKE_SOURCE_DIR}/src/toontown/suit)
 include_directories(${CMAKE_SOURCE_DIR}/src/toontown/toontownbase)
-include_directories(${CMAKE_SOURCE_DIR}/src/otp/movement)
+include_directories(${CMAKE_SOURCE_DIR}/src/toontown/movement)
 include_directories(${CMAKE_SOURCE_DIR}/src/otp/otpbase)
 include_directories(${PANDA_DIR}/include)
 include_directories(${Python_INCLUDE_DIRS})
@@ -142,6 +152,7 @@ if(NOT BUILD_STATIC_LIB)
 
     if(WIN32)
         add_library(libtoontown SHARED
+            ${MOVEMENT_FILES}
             ${DNA_FILES}
             ${PET_FILES}
             ${SUIT_FILES}
@@ -152,6 +163,7 @@ if(NOT BUILD_STATIC_LIB)
 
     else()
         add_library(toontown MODULE
+            ${MOVEMENT_FILES}
             ${DNA_FILES}
             ${PET_FILES}
             ${SUIT_FILES}
@@ -164,6 +176,7 @@ else()
 
     if(WIN32)
         add_library(libtoontown STATIC
+            ${MOVEMENT_FILES}
             ${DNA_FILES}
             ${PET_FILES}
             ${SUIT_FILES}
@@ -172,6 +185,7 @@ else()
 
     else()
         add_library(toontown STATIC
+            ${MOVEMENT_FILES}
             ${DNA_FILES}
             ${PET_FILES}
             ${SUIT_FILES}
@@ -182,6 +196,7 @@ else()
 endif()
 
 ### Setup source groups and defines for configurables ###
+source_group("movement" FILES ${MOVEMENT_FILES})
 source_group("dna" FILES ${DNA_FILES})
 source_group("pet" FILES ${PET_FILES})
 source_group("suit" FILES ${SUIT_FILES})

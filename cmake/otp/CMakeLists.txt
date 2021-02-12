@@ -1,17 +1,7 @@
-cmake_minimum_required(VERSION 2.8.8 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.19.2 FATAL_ERROR)
 project(libotp)
 
 ### Define core components ###
-set(MOVEMENT_FILES
-    ${CMAKE_SOURCE_DIR}/src/otp/movement/cImpulse.cxx
-    ${CMAKE_SOURCE_DIR}/src/otp/movement/cImpulse.h
-    ${CMAKE_SOURCE_DIR}/src/otp/movement/cMover.cxx
-    ${CMAKE_SOURCE_DIR}/src/otp/movement/cMover.h
-    ${CMAKE_SOURCE_DIR}/src/otp/movement/cMoverGroup.cxx
-    ${CMAKE_SOURCE_DIR}/src/otp/movement/cMoverGroup.h
-    ${CMAKE_SOURCE_DIR}/src/otp/movement/config_movement.cxx
-    ${CMAKE_SOURCE_DIR}/src/otp/movement/config_movement.h
-)
 set(NAMETAG_FILES
     ${CMAKE_SOURCE_DIR}/src/otp/nametag/chatBalloon.cxx
     ${CMAKE_SOURCE_DIR}/src/otp/nametag/chatBalloon.h
@@ -57,7 +47,7 @@ set(OTP_IGATE_FILES
 set_property(SOURCE ${OTP_IGATE_FILES} PROPERTY GENERATED TRUE)
 
 include_directories(${CMAKE_SOURCE_DIR}/src/otp/nametag)
-include_directories(${CMAKE_SOURCE_DIR}/src/otp/movement)
+include_directories(${CMAKE_SOURCE_DIR}/src/toontown/movement)
 include_directories(${CMAKE_SOURCE_DIR}/src/otp/navigation)
 include_directories(${CMAKE_SOURCE_DIR}/src/otp/otpbase)
 include_directories(${PANDA_DIR}/include)
@@ -104,7 +94,6 @@ if(NOT BUILD_STATIC_LIB)
 
     if(WIN32)
         add_library(libotp SHARED
-            ${MOVEMENT_FILES}
             ${NAMETAG_FILES}
             ${NAVIGATION_FILES}
             ${OTP_IGATE_FILES}
@@ -118,7 +107,6 @@ if(NOT BUILD_STATIC_LIB)
 
     else()
         add_library(otp MODULE
-            ${MOVEMENT_FILES}
             ${NAMETAG_FILES}
             ${NAVIGATION_FILES}
             ${OTP_IGATE_FILES}
@@ -134,7 +122,6 @@ else()
 
     if(WIN32)
         add_library(libotp STATIC
-            ${MOVEMENT_FILES}
             ${NAMETAG_FILES}
             ${NAVIGATION_FILES}
             ${OTP_IGATE_FILES}
@@ -146,7 +133,6 @@ else()
 
     else()
         add_library(otp STATIC
-            ${MOVEMENT_FILES}
             ${NAMETAG_FILES}
             ${NAVIGATION_FILES}
             ${OTP_IGATE_FILES}
@@ -160,7 +146,6 @@ else()
 endif()
 
 ### Setup source groups and defines for configurables ###
-source_group("movement" FILES ${MOVEMENT_FILES})
 source_group("nametag" FILES ${NAMETAG_FILES})
 source_group("navigation" FILES ${NAVIGATION_FILES})
 source_group("otp_interrogate_files" FILES ${OTP_IGATE_FILES})

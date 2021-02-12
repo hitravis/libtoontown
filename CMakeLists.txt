@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.8 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.19.2 FATAL_ERROR)
 project(libdisney)
 
 # Thanks to loblao's libpandadna for the base interrogate CMake project
