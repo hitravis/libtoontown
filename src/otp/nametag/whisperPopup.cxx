@@ -65,19 +65,11 @@ WhisperPopup::
 //               with the two supplied parameters.
 ////////////////////////////////////////////////////////////////////
 void WhisperPopup::
-set_clickable(const std::string &avatar_name, int avatar_id, int is_player_id) {
+set_clickable(const std::string &avatar_name, int avatar_id) {
   //had to add is player to tell avIds from playerIds input is int because it's coming from python
   _clickable = true;
   _avatar_name = avatar_name;
   _avatar_id = avatar_id;
-  if (is_player_id != 0)
-	{
-		_is_player_id = true;
-	}
-  else
-  	{
-		_is_player_id = false;
-	}
   _state = PGButton::S_ready;
 }
 
@@ -180,7 +172,7 @@ get_score() {
 ////////////////////////////////////////////////////////////////////
 void WhisperPopup::
 click() {
-  throw_event("clickedWhisper", _avatar_id, _is_player_id);
+  throw_event("clickedWhisper", _avatar_id);
 }
 
 ////////////////////////////////////////////////////////////////////

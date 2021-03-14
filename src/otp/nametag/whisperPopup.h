@@ -44,7 +44,7 @@ PUBLISHED:
   WhisperPopup(const std::string &text, TextFont *font, WhisperType whisper_type);
   virtual ~WhisperPopup();
 
-  void set_clickable(const std::string &avatar_name, int avatar_id, int is_player_id = 0);
+  void set_clickable(const std::string &avatar_name, int avatar_id);
 
   void manage(MarginManager *manager);
   void unmanage(MarginManager *manager);
@@ -82,7 +82,6 @@ private:
   bool _clickable;
   std::string _avatar_name;
   int _avatar_id;
-  bool _is_player_id;
 
   PT(PopupMouseWatcherRegion) _region;
   PT(MouseWatcher) _mouse_watcher;
