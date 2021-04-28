@@ -279,19 +279,6 @@ get_chat() const {
 }
 
 ////////////////////////////////////////////////////////////////////
-//     Function: NametagGroup::get_stomp_text
-//       Access: Published
-//  Description: Returns the current page of the chat message.
-////////////////////////////////////////////////////////////////////
-INLINE std::string NametagGroup::
-get_stomp_text() const {
-  if (_chat_stomp_accum < 1) {
-    return std::string();
-  }
-  return _chat_block_hold;
-}
-
-////////////////////////////////////////////////////////////////////
 //     Function: NametagGroup::get_chat
 //       Access: Published
 //  Description: Returns the nth page of the chat message.
@@ -333,29 +320,6 @@ get_page_number() const {
 INLINE int NametagGroup::
 get_num_chat_pages() const {
   return _chat_pages.size();
-}
-
-////////////////////////////////////////////////////////////////////
-//     Function: NametagGroup::get_chat_stomp
-//       Access: Published
-//  Description: Returns the number of pages available in the current
-//               chat message.
-////////////////////////////////////////////////////////////////////
-INLINE int NametagGroup::
-get_chat_stomp() const {
-  return _chat_stomp_accum;
-}
-
-
-////////////////////////////////////////////////////////////////////
-//     Function: NametagGroup::get_stomp_delay
-//       Access: Published
-//  Description: Returns the number of pages available in the current
-//               chat message.
-////////////////////////////////////////////////////////////////////
-INLINE float NametagGroup::
-get_stomp_delay() const {
-  return _chat_block_length;
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -491,7 +455,7 @@ is_active() const {
 ////////////////////////////////////////////////////////////////////
 INLINE bool NametagGroup::
 has_page_button() const {
-  return !_buttons_pending && (_chat_flags & CF_page_button) != 0;
+  return (_chat_flags & CF_page_button) != 0;
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -502,7 +466,7 @@ has_page_button() const {
 ////////////////////////////////////////////////////////////////////
 INLINE bool NametagGroup::
 has_quit_button() const {
-  return !_buttons_pending && (_chat_flags & CF_quit_button) != 0;
+  return (_chat_flags & CF_quit_button) != 0;
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -515,7 +479,7 @@ has_quit_button() const {
 ////////////////////////////////////////////////////////////////////
 INLINE bool NametagGroup::
 has_no_quit_button() const {
-  return !_buttons_pending && (_chat_flags & CF_no_quit_button) != 0;
+  return (_chat_flags & CF_no_quit_button) != 0;
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -526,11 +490,6 @@ has_no_quit_button() const {
 ////////////////////////////////////////////////////////////////////
 INLINE bool NametagGroup::
 has_button() const {
-  if (_buttons_pending) {
-    // Buttons will be along later.
-    return false;
-  }
-
   if ((_chat_flags & (CF_page_button | CF_quit_button)) != 0) {
     if ((_chat_flags & CF_no_quit_button) != 0 &&
         get_page_number() >= get_num_chat_pages() - 1) {

@@ -91,7 +91,6 @@ PUBLISHED:
   void set_chat(const std::string &chat, int chat_flags, int page_number = 0);
   INLINE void clear_chat();
   INLINE std::string get_chat() const;
-  INLINE std::string get_stomp_text() const;
   INLINE const std::string &get_chat(int page_number) const;
   INLINE int get_chat_flags() const;
 
@@ -99,8 +98,6 @@ PUBLISHED:
   INLINE int get_page_number() const;
 
   INLINE int get_num_chat_pages() const;
-  INLINE int get_chat_stomp() const;
-  INLINE float get_stomp_delay() const;
 
   INLINE void set_unique_id(const std::string &event);
   INLINE const std::string &get_unique_id() const;
@@ -178,16 +175,10 @@ private:
   int _chat_flags;
 
   double _chat_timeout;
-  double _button_timeout;
 
-  std::string _chat_block_hold;
   int    _chat_flags_hold;
-  double _chat_block_length;
-  double _chat_timeblock;
-  int _chat_stomp_accum;
 
   int _page_number;
-  bool _buttons_pending;
 
   std::string _unique_id;
   int _object_code;

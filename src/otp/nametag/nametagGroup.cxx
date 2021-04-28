@@ -34,12 +34,7 @@ NametagGroup() {
   _has_shadow = false;
   _chat_flags = 0;
   _chat_timeout = 0.0f;
-  _button_timeout = 0.0f;
   _page_number = 0;
-  _buttons_pending = false;
-  _chat_stomp_accum = 0;
-  _chat_timeblock = 0.0f;
-  _chat_block_length = 0.5f;
 
   _unique_id = "nametag-" + format_string(++_unique_index);
   _object_code = 0;
@@ -316,37 +311,14 @@ set_chat(const std::string &chat, int chat_flags, int page_number) {
   }
   else {
     _chat_pages.clear();
-    _chat_stomp_accum++;
-    if(_chat_stomp_accum < 2 || (_chat_block_length < 0.05)){
-      // Break the chat message up and store it by pages.
-      tokenize(chat, _chat_pages, "\a");
-    }
-    else{
-      _chat_block_hold = "" + chat;
-      _chat_timeblock = now + _chat_block_length;
-      _chat_flags_hold = _chat_flags;
-      _chat_pages.clear();
-      _chat_flags = 0;
-    }
-
+    // Break the chat message up and store it by pages.
+    tokenize(chat, _chat_pages, "\a");
   }
 
-
-
-  if (((_chat_flags & CF_timeout) != 0) && (_chat_timeblock < now)) {
+  if ((_chat_flags & CF_timeout) != 0) {
     // If we requested a timeout, determine when that will happen.
     double keep_for = std::max(std::min((double)chat.length() * 0.5, 12.0), 4.0);
     _chat_timeout = now + keep_for;
-  }
-
-  if (will_have_button()) {
-    // If we expect a button to appear, determine when *that* will
-    // happen.
-    _button_timeout = now + NametagGlobals::button_delay_time;
-    _buttons_pending = true;
-  } else {
-    _button_timeout = 0.0;
-    _buttons_pending = false;
   }
 
   update_contents_all();
@@ -362,12 +334,6 @@ void NametagGroup::
 set_page_number(int page_number) {
   if (_page_number != page_number) {
     _page_number = page_number;
-
-    if (will_have_button()) {
-      double now = ClockObject::get_global_clock()->get_frame_time();
-      _button_timeout = now + NametagGlobals::button_delay_time;
-      _buttons_pending = true;
-    }
 
     update_contents_all();
   }
@@ -491,26 +457,12 @@ update_regions() {
 
   // Also decide whether it's time to reset the chat message.
   double now = ClockObject::get_global_clock()->get_frame_time();
-  if((_chat_timeblock < now) && _chat_stomp_accum > 1){
-      _chat_stomp_accum = 0;
-      set_chat(_chat_block_hold, _chat_flags_hold, _page_number);
-  }
 
-  if ((_chat_flags & CF_timeout) != 0) {
-    if (now >= _chat_timeout) {
-      clear_chat();
-      _chat_stomp_accum = 0;
-    }
+  if ((_chat_flags & CF_timeout) != 0 && now >= _chat_timeout) {
+    clear_chat();
   }
 
   bool force_update = false;
-  // Is it time to reveal the buttons?
-  if (_buttons_pending) {
-    if (now >= _button_timeout) {
-      _buttons_pending = false;
-      force_update = true;
-    }
-  }
 
   // And should we change active state based on the global switch?
   if (_master_active != NametagGlobals::get_master_nametags_active()) {
